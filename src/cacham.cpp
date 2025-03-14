@@ -66,12 +66,40 @@ void hinh_anh_player(const char* filename , SDL_Texture**player1){
 void player_in(SDL_Renderer* renderer, SDL_Texture* player, int playerX, int playerY, const int playerW, const int playerH){
     SDL_Rect playerRect = {playerX, playerY, playerW, playerH};
         SDL_RenderCopy(renderer, player, NULL, &playerRect);
-            SDL_RenderPresent(renderer);
 }
 bool chuot (int mouseX, int mouseY, SDL_Rect Start){
     return (mouseX >= Start.x && mouseX <= Start.x + Start.w &&
             mouseY >= Start.y && mouseY <= Start.y + Start.h);
 }
+
+void cot_troi(SDL_Renderer* renderer, SDL_Texture* cotTop, SDL_Texture* cotBot, int* Col_X, int* Col_H, int* Col_H1, int* Col_X1, int col_H_duoi, int gap) {
+    *Col_X -= SCROLL_SPEED;
+    *Col_X1 -= SCROLL_SPEED;
+    if (*Col_X <= -Col_W && *Col_X1 <= SCREEN_WIDTH - kc_col - Col_W ) {
+        *Col_X = SCREEN_WIDTH - Col_W; 
+        *Col_H = Min + rand() % Max;    
+        while (col_H_duoi - *Col_H <= 0) {
+            *Col_H = Min + rand() % Max;
+        }
+    }
+    if (*Col_X1 <= -Col_W && *Col_X <= SCREEN_WIDTH - kc_col - Col_W) {
+        *Col_X1 = SCREEN_WIDTH - Col_W;
+        *Col_H1 = Min + rand() % Max;
+        while (col_H_duoi - *Col_H1 <= 0) {
+            *Col_H1 = Min + rand() % Max;
+        }
+    }
+    SDL_Rect cotRectTop = { *Col_X, 0, Col_W, *Col_H };
+    SDL_RenderCopy(renderer, cotTop, NULL, &cotRectTop);
+    SDL_Rect cotRectBot = { *Col_X, gap + *Col_H, Col_W, col_H_duoi - *Col_H };
+    SDL_RenderCopy(renderer, cotBot, NULL, &cotRectBot);
+
+    SDL_Rect cotRectTop1 = { *Col_X1, 0, Col_W, *Col_H1 };
+    SDL_RenderCopy(renderer, cotTop, NULL, &cotRectTop1);
+    SDL_Rect cotRectBot1 = { *Col_X1, gap + *Col_H1, Col_W, col_H_duoi - *Col_H1 };
+    SDL_RenderCopy(renderer, cotBot, NULL, &cotRectBot1);
+}
+
 
 void hoat_anh(int vantoc, SDL_Texture**p, SDL_Texture*p1, SDL_Texture*p2){
     if (vantoc < 0) {
@@ -104,6 +132,8 @@ void exit(){
     SDL_DestroyTexture(player2);
     SDL_DestroyTexture(player);
     SDL_DestroyTexture(background);
+    SDL_DestroyTexture(cotTop);
+    SDL_DestroyTexture(cotBot);
     IMG_Quit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

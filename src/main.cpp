@@ -1,19 +1,13 @@
 #include "toancuc.h"
 #include "cacham.h"
+#include "code.h"
 
 int main (int argc, char*argv[])
 {
-    window = initSDL(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
-    renderer = createRenderer(window);
-    background = loadTexture("C:/Users/User/Desktop/game/src/image/backround1.png", renderer);
-    SDL_QueryTexture(background, NULL, NULL, &backgroundWidth, &backgroundHeight);
-    menu = loadTexture("C:/Users/User/Desktop/game/src/image/menu.png", renderer);
-    start = loadTexture("C:/Users/User/Desktop/game/src/image/start.png", renderer);
-    hinh_anh_player("C:/Users/User/Desktop/game/src/image/player1.png" , &player1);
-    hinh_anh_player("C:/Users/User/Desktop/game/src/image/player2.png" , &player2);
-    player = player1;
-    SDL_Rect startRect = {startX , startY, startW, startH };
-    chuyen_canh = menu;
+    nhap_du_lieu();
+    srand(std::time(0));
+    Col_H = Min + rand() % Max/2;
+    Col_H1 = Min + rand() % Max/2;
     //Điều khiển
     while (running) {
         while (SDL_PollEvent(&e)) {
@@ -43,7 +37,9 @@ int main (int argc, char*argv[])
             SDL_RenderClear(renderer);
             renderScrollingBackground(renderer, background, backgroundWidth, &backgroundX);
             player_in(renderer, player, playerX, playerY, playerW, playerH);
-            SDL_Delay(10);
+            cot_troi( renderer, cotTop, cotBot, &Col_X, &Col_H, &Col_H1, &Col_X1, col_H_duoi, gap);
+            SDL_RenderPresent(renderer);
+            SDL_Delay(delay);
         }
     }
     void exit();
